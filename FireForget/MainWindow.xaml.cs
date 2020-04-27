@@ -37,6 +37,7 @@ namespace FireForget
             wrk.Start();
 
             MessageBox.Show("Mi dimentico del thread secondario e non attendo il thread secondario per visualizzare questo messaggio");
+
         }
 
         private void btn_Stop_Click(object sender, RoutedEventArgs e)
