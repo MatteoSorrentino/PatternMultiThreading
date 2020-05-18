@@ -28,17 +28,16 @@ namespace FireForget
         }
 
         CancellationTokenSource cts;
-        private void btn_Start_Click(object sender, RoutedEventArgs e)
+        private async void btn_Start_Click(object sender, RoutedEventArgs e)
         {
             cts = new CancellationTokenSource();
 
-            //Worker wrk = new Worker(10, 1000, cts);
+            WorkerAsync wrk = new WorkerAsync(10, 1000, cts);
 
-            IProgress<int> progress = new Progress<int>(UpdateUI);
+            //IProgress<int> progress = new Progress<int>(UpdateUI);
+            //WorkerProgress wrk = new WorkerProgress(10, 1000, cts, progress);
 
-            WorkerProgress wrk = new WorkerProgress(10, 1000, cts, progress);
-
-            wrk.Start();
+            await wrk.Start();
 
             MessageBox.Show("Mi dimentico del thread secondario e non attendo il thread secondario per visualizzare questo messaggio");
 
