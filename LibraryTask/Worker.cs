@@ -26,7 +26,7 @@ namespace LibraryTask
 
         private void DoWork()
         {
-            for (int i = 0; i < _max; i++)
+            for (int i = 0; i <= _max; i++)
             {
                 Thread.Sleep(_delay);
                 if (_cts.IsCancellationRequested)

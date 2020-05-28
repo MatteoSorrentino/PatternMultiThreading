@@ -28,13 +28,16 @@ namespace FireForget
         }
 
         CancellationTokenSource cts;
+        Semaphore sem = new Semaphore(1, 1);
         private async void btn_Start_Click(object sender, RoutedEventArgs e)
         {
             cts = new CancellationTokenSource();
 
-            WorkerAsync wrk = new WorkerAsync(10, 1000, cts);
+            //WorkerAsync wrk = new WorkerAsync(10, 1000, cts);
 
-            //IProgress<int> progress = new Progress<int>(UpdateUI);
+            IProgress<int> progress = new Progress<int>(UpdateUI);
+            WorkerProgressAsync wrk = new WorkerProgressAsync(sem, 10, 1000, cts, progress);
+
             //WorkerProgress wrk = new WorkerProgress(10, 1000, cts, progress);
 
             await wrk.Start();

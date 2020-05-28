@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LibraryTask
 {
-    public class WorkerProgress
+    public class WorkerProgressAsync
     {
         CancellationTokenSource _cts;
 
@@ -14,23 +14,26 @@ namespace LibraryTask
 
         int _max;
         int _delay;
+        Semaphore _sem;
 
         //costruttore
-        public WorkerProgress(int max, int delay, CancellationTokenSource cts, IProgress<int> progress)
+        public WorkerProgressAsync(Semaphore sem, int max, int delay, CancellationTokenSource cts, IProgress<int> progress)
         {
             _max = max;
             _delay = delay;
             _cts = cts;
             _progress = progress;
+            _sem = sem;
         }
 
-        public void Start()
+        public async Task Start()
         {
-            Task.Factory.StartNew(DoWork);
+            await Task.Factory.StartNew(DoWork);
         }
 
         private void DoWork()
         {
+            _sem.WaitOne();
             for (int i = 0; i <= _max; i++)
             {
                 NotifyProgress(_progress, i);
@@ -38,6 +41,7 @@ namespace LibraryTask
                 if (_cts.IsCancellationRequested)
                     break;
             }
+            _sem.Release();
         }
 
         private void NotifyProgress(IProgress<int> progress, int i)
